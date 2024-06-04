@@ -3,6 +3,17 @@ from django.shortcuts import render
 from django.template import loader
 from blogging.models import Post
 
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = "blogging/list.html"
+    queryset = Post.objects.exclude(published_date__exact=None).order_by(
+        "-published_date"
+    )
+
 
 def stub_view(request, *args, **kwargs):
     body = "Stub View\n\n"
@@ -31,6 +42,11 @@ def list_view(request):
     posts = published.order_by("-published_date")
     context = {"posts": posts}
     return render(request, "blogging/list.html", context)
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "blogging/detail.html"
 
 
 def detail_view(request, post_id):
