@@ -10,6 +10,7 @@ from django.views.generic.detail import DetailView
 class PostListView(ListView):
     model = Post
     template_name = "blogging/list.html"
+    # Exclude posts that have not been published yet and order by published date
     queryset = Post.objects.exclude(published_date__exact=None).order_by(
         "-published_date"
     )
